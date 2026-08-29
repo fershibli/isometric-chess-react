@@ -41,9 +41,11 @@ App: http://127.0.0.1:43125
 
 ## Deploy
 
-1. Push to `main`
+1. Push this repo to GitHub (or replace the contents of `fershibli/isometric-chess-react`)
 2. Repo **Settings → Pages → Source: GitHub Actions**
 3. The `Pages` workflow publishes `dist` with `BASE_PATH=/<repo>/`
+
+Live URL shape: `https://<user>.github.io/<repo>/`
 
 ## Fixes vs the old CRA prototype
 
