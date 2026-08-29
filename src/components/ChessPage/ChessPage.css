@@ -1,0 +1,52 @@
+.chess-page {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 1rem;
+  box-sizing: border-box;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(222, 184, 135, 0.35), transparent 45%),
+    radial-gradient(circle at 80% 10%, rgba(139, 69, 19, 0.2), transparent 40%),
+    linear-gradient(160deg, #f3ece3 0%, #e8d9c4 45%, #d7c3a5 100%);
+}
+
+.chess-page__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  z-index: 2;
+}
+
+.chess-page__title {
+  margin: 0;
+  font-family: 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  letter-spacing: 0.04em;
+  color: #3b2414;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.chess-page__board-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(90vmin, 640px);
+  height: min(90vmin, 640px);
+}
+
+@media (max-width: 640px) {
+  .chess-page {
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .chess-page__board-wrap {
+    width: min(96vw, 92vmin);
+    height: min(96vw, 92vmin);
+  }
+}
