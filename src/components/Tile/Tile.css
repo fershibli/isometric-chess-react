@@ -9,6 +9,9 @@
   box-sizing: border-box;
   background-color: transparent;
   cursor: pointer;
+}
+
+.chessboard--intro .tile {
   animation: emptyAnimation, emergeAnimation;
   animation-fill-mode: forwards, backwards;
   animation-duration: 1000ms, 1000ms;
@@ -69,7 +72,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tile {
+  .chessboard--intro .tile {
     animation: none;
   }
 }

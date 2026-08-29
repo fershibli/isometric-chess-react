@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Tile from '../Tile/Tile'
 import { squareFromRC } from '../../chess/pieces'
 import './Chessboard.css'
@@ -10,8 +10,19 @@ export default function Chessboard({
   lastMove,
   onSelectSquare,
 }) {
+  const [intro, setIntro] = useState(true)
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setIntro(false), 2800)
+    return () => window.clearTimeout(timer)
+  }, [])
+
   return (
-    <div className="chessboard" role="grid" aria-label="Chessboard">
+    <div
+      className={`chessboard${intro ? ' chessboard--intro' : ''}`}
+      role="grid"
+      aria-label="Chessboard"
+    >
       {board.map((rank, row) =>
         rank.map((piece, col) => {
           const square = squareFromRC(row, col)

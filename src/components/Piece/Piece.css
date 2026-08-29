@@ -14,13 +14,16 @@
   -webkit-text-stroke: 0.5px rgba(var(--color2), 0.2);
   transform: translate(-150%, -100%) rotateX(-30deg) rotateZ(-30deg)
     skew(+20deg, -20deg) scale(calc(2 * var(--scale)), calc(5 * var(--scale)));
+  font-size: 1rem;
+  line-height: 1;
+  user-select: none;
+}
+
+.chessboard--intro .piece {
   animation: emptyPieceAnimation, dropAnimation;
   animation-fill-mode: forwards, backwards;
   animation-duration: 1000ms, 1000ms;
   animation-delay: 0s, calc(1s + var(--delay) * 3);
-  font-size: 1rem;
-  line-height: 1;
-  user-select: none;
 }
 
 @keyframes emptyPieceAnimation {
@@ -63,7 +66,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .piece {
+  .chessboard--intro .piece {
     animation: none;
   }
 }
