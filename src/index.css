@@ -1,13 +1,60 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  --bg-0: #070b1a;
+  --bg-1: #121a38;
+  --surface: rgba(255, 255, 255, 0.055);
+  --border: rgba(255, 255, 255, 0.13);
+  --text: #eef2ff;
+  --muted: #9aa6c8;
+  --accent: #ffc75a;
+  --focus: #67e8f9;
+  color-scheme: dark;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+html {
+  background-color: var(--bg-0);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  color: var(--text);
+  background-color: var(--bg-0);
+  background-image:
+    radial-gradient(1100px 620px at 18% -8%, rgba(120, 96, 255, 0.22), transparent 62%),
+    radial-gradient(900px 520px at 92% 8%, rgba(255, 176, 76, 0.16), transparent 60%),
+    linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 58%, var(--bg-0) 100%);
+  background-attachment: fixed;
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font-family: inherit;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }

@@ -1,0 +1,108 @@
+.promo {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.promo__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background: rgba(4, 6, 18, 0.72);
+  backdrop-filter: blur(3px);
+  cursor: pointer;
+}
+
+.promo__card {
+  position: relative;
+  width: min(26rem, 100%);
+  padding: 1.35rem;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: linear-gradient(165deg, #1a2242, #101733);
+  box-shadow: 0 24px 60px rgba(2, 4, 14, 0.6);
+  animation: promo-in 180ms ease;
+}
+
+.promo__title {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.promo__hint {
+  margin: 0.3rem 0 1rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.promo__options {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin: 0 0 0.9rem;
+  padding: 0;
+  list-style: none;
+}
+
+.promo__option {
+  display: grid;
+  gap: 0.3rem;
+  justify-items: center;
+  width: 100%;
+  padding: 0.6rem 0.3rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 140ms ease, border-color 140ms ease, transform 120ms ease;
+}
+
+.promo__option svg {
+  width: 100%;
+  height: 3.4rem;
+}
+
+.promo__option:hover {
+  background: rgba(255, 199, 90, 0.16);
+  border-color: rgba(255, 199, 90, 0.6);
+  transform: translateY(-2px);
+}
+
+.promo__option:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.promo__name {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+}
+
+.promo__cancel {
+  width: 100%;
+}
+
+@keyframes promo-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .promo__card {
+    animation: none;
+  }
+
+  .promo__option:hover {
+    transform: none;
+  }
+}

@@ -1,0 +1,73 @@
+.opponent {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.opponent__row {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.opponent__button {
+  flex: 1;
+  min-height: 2.1rem;
+  padding: 0 0.5rem;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: background-color 140ms ease, color 140ms ease;
+}
+
+.opponent__button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+
+.opponent__button:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+
+.opponent__button[aria-pressed='true'] {
+  background: rgba(255, 199, 90, 0.9);
+  color: #22160a;
+}
+
+.opponent__hint {
+  margin: 0;
+  min-height: 1.15rem;
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.opponent__thinking {
+  color: var(--focus);
+}
+
+.opponent__thinking::after {
+  content: '...';
+  animation: opponent-dots 1.2s steps(4, end) infinite;
+  clip-path: inset(0 100% 0 0);
+}
+
+@keyframes opponent-dots {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opponent__thinking::after {
+    animation: none;
+    clip-path: none;
+  }
+}

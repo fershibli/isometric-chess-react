@@ -1,0 +1,100 @@
+.board-stage {
+  --tile-w: clamp(36px, 10.6cqw, 112px);
+  --tile-h: calc(var(--tile-w) * var(--pitch));
+  --rim: calc(var(--tile-h) * 0.3);
+  --thick: calc(var(--tile-h) * 0.9);
+  position: relative;
+  /* Nine columns wide: eight squares plus the label gutters on the near edges. */
+  width: calc(9 * var(--tile-w));
+  margin: 0 auto;
+  padding-top: calc(var(--tile-w) * 0.95);
+  padding-bottom: calc(var(--tile-h) * 2.2);
+}
+
+.board {
+  position: relative;
+  width: calc(8 * var(--tile-w));
+  height: calc(8 * var(--tile-h));
+  margin: 0 auto;
+}
+
+.board::before {
+  content: '';
+  position: absolute;
+  left: 6%;
+  top: 18%;
+  width: 88%;
+  height: calc(8 * var(--tile-h));
+  background: radial-gradient(ellipse at center, rgba(2, 4, 16, 0.6) 0%, rgba(2, 4, 16, 0) 72%);
+  filter: blur(14px);
+}
+
+.board__slab {
+  position: absolute;
+  left: calc(-1 * var(--rim));
+  top: calc(-1 * var(--rim));
+  width: calc(8 * var(--tile-w) + 2 * var(--rim));
+  height: calc(8 * var(--tile-h) + 2 * var(--rim) + var(--thick));
+}
+
+.board__slab-face {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.board__slab-face--top {
+  height: calc(100% - var(--thick));
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  background: linear-gradient(150deg, #4a3218 0%, #2f1f10 60%, #221609 100%);
+}
+
+.board__slab-face--left {
+  clip-path: polygon(
+    0 calc((100% - var(--thick)) / 2),
+    50% calc(100% - var(--thick)),
+    50% 100%,
+    0 calc((100% + var(--thick)) / 2)
+  );
+  background: linear-gradient(180deg, #2a1b0d 0%, #150d05 100%);
+}
+
+.board__slab-face--right {
+  clip-path: polygon(
+    100% calc((100% - var(--thick)) / 2),
+    50% calc(100% - var(--thick)),
+    50% 100%,
+    100% calc((100% + var(--thick)) / 2)
+  );
+  background: linear-gradient(180deg, #1d1208 0%, #0d0803 100%);
+}
+
+.board__label {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: var(--tile-w);
+  height: var(--tile-h);
+  margin-left: calc(var(--tile-w) / -2);
+  transform: translate(
+    calc((var(--bx) - var(--by)) * var(--tile-w) / 2),
+    calc((var(--bx) + var(--by)) * var(--tile-h) / 2)
+  );
+  color: var(--muted);
+  font-size: clamp(0.62rem, 1.5vw, 0.85rem);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+@media (max-width: 860px) {
+  .board-stage {
+    --tile-w: clamp(34px, 10.4cqw, 86px);
+  }
+}
