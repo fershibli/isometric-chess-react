@@ -1,0 +1,53 @@
+.piece-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.piece__art {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  /* The SVG box spans empty space around the silhouette; only the painted
+     shapes below take pointer input, so clicks fall through to the square
+     drawn behind a tall piece. */
+  pointer-events: none;
+}
+
+.piece__body {
+  stroke-width: 3;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.piece__body path {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.piece__art--light .piece__body {
+  stroke: #5c3a12;
+  filter: drop-shadow(0 3px 4px rgba(12, 8, 30, 0.55));
+}
+
+.piece__art--dark .piece__body {
+  stroke: #efe9ff;
+  filter: drop-shadow(0 3px 4px rgba(4, 2, 16, 0.65));
+}
+
+.piece__art--light .piece__details {
+  color: #5c3a12;
+  fill: #b06a1f;
+  stroke: #5c3a12;
+}
+
+.piece__art--dark .piece__details {
+  color: #efe9ff;
+  fill: #cfc6ff;
+  stroke: #efe9ff;
+}
+
+.piece__sheen {
+  pointer-events: none;
+}
