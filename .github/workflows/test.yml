@@ -13,12 +13,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Install
-        run: |
-          # The merge kept the Create React App lockfile. Drop it and install
-          # from package.json so Vite and chess.js resolve cleanly.
-          rm -f package-lock.json
-          npm install
+          cache: npm
+      - run: npm ci
       - run: npm run lint
       - run: npm test
       - run: npm run build
