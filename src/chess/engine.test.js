@@ -48,7 +48,9 @@ describe('chooseMove', () => {
   it('only ever suggests legal moves', () => {
     const game = new Chess()
     for (let ply = 0; ply < 12 && !game.isGameOver(); ply += 1) {
-      const move = chooseMove(game.fen(), { depth: 1, jitter: 40, rng: Math.random })
+      // Legality cannot depend on how long the search ran, so cap the budget
+      // rather than spend the default 1200ms twelve times over.
+      const move = chooseMove(game.fen(), { depth: 1, jitter: 40, budgetMs: 50, rng: Math.random })
       expect(() => game.move(move)).not.toThrow()
     }
     expect(game.history().length).toBe(12)
