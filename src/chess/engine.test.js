@@ -22,9 +22,21 @@ describe('evaluate', () => {
 })
 
 describe('chooseMove', () => {
+  const FREE_QUEEN = 'rnbqkbnr/ppp1pppp/8/3Q4/8/8/PPPPPPPP/RNB1KBNR b KQkq - 0 1'
+
   it('takes a free queen', () => {
-    const fen = 'rnbqkbnr/ppp1pppp/8/3Q4/8/8/PPPPPPPP/RNB1KBNR b KQkq - 0 1'
-    expect(sanFor(fen, { depth: 2, ...fixed })).toBe('Qxd5')
+    // One ply is all this needs, and it is the depth that stays honest: a full
+    // depth-2 search of this position runs for seconds, so the old version of
+    // this test was really measuring whether the machine was busy.
+    expect(sanFor(FREE_QUEEN, { depth: 1, budgetMs: 4000, ...fixed })).toBe('Qxd5')
+  })
+
+  it('still plays the best-ordered move when the search never finishes', () => {
+    // budgetMs of 1 aborts before the first iteration completes, so this is the
+    // fallback path. It has to be a real reply, not an arbitrary legal one.
+    expect(sanFor(FREE_QUEEN, { depth: 3, budgetMs: 1, jitter: 90, rng: () => 0.99 })).toBe(
+      'Qxd5',
+    )
   })
 
   it('plays the mate when there is one', () => {
