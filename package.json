@@ -1,7 +1,7 @@
 {
   "name": "isometric-chess-react",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "description": "Xadrez isometrico em madeira, com pecas de caractere e tabuleiro que ondula como agua parada",
   "license": "MIT",
