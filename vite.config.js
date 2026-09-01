@@ -21,6 +21,6 @@ export default defineConfig(({ mode }) => ({
     setupFiles: './src/test/setup.js',
     css: true,
     globals: false,
-    include: ['src/chess/**/*.test.{js,jsx}'],
+    include: ['src/**/*.test.{js,jsx}'],
   },
 }))
