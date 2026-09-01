@@ -1,12 +1,48 @@
+/*
+ * Chocolate and wood. Everything on screen is either a slab of timber, a pool
+ * of dark cocoa, or the amber light falling on them, so the whole palette is
+ * built from three warm ramps plus one cold accent for the water.
+ */
 :root {
-  --bg-0: #070b1a;
-  --bg-1: #121a38;
-  --surface: rgba(255, 255, 255, 0.055);
-  --border: rgba(255, 255, 255, 0.13);
-  --text: #eef2ff;
-  --muted: #9aa6c8;
-  --accent: #ffc75a;
-  --focus: #67e8f9;
+  --cocoa-950: #0f0904;
+  --cocoa-900: #170e06;
+  --cocoa-850: #1f140a;
+  --cocoa-800: #2a1a0d;
+  --cocoa-700: #3a2412;
+
+  --wood-600: #4f3116;
+  --wood-500: #6b4423;
+  --wood-400: #8b4513;
+  --wood-300: #a9713c;
+  --wood-200: #c99a63;
+
+  --sand-300: #deb887;
+  --sand-200: #ecd2a9;
+  --sand-100: #f7e8cd;
+
+  --cream: #f6e7d0;
+  --muted: #c2a882;
+  --faint: #8d7657;
+
+  --caramel: #e8a33d;
+  --caramel-dim: #b8761f;
+  --ember: #d9552f;
+
+  /* The board is water in a wooden frame; this is the only cold hue used. */
+  --water: #7fc8c0;
+  --water-deep: #2f7b78;
+
+  --border: rgba(222, 184, 135, 0.18);
+  --border-strong: rgba(222, 184, 135, 0.34);
+  --surface: rgba(96, 60, 28, 0.28);
+  --surface-high: rgba(126, 82, 40, 0.34);
+
+  --shadow-lift: 0 18px 40px rgba(8, 4, 1, 0.55);
+  --radius: 14px;
+
+  --font-body: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+  --font-ui: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
   color-scheme: dark;
 }
 
@@ -21,20 +57,34 @@ body,
 }
 
 html {
-  background-color: var(--bg-0);
+  background-color: var(--cocoa-950);
 }
 
 body {
   margin: 0;
   min-width: 320px;
-  color: var(--text);
-  background-color: var(--bg-0);
+  color: var(--cream);
+  background-color: var(--cocoa-950);
   background-image:
-    radial-gradient(1100px 620px at 18% -8%, rgba(120, 96, 255, 0.22), transparent 62%),
-    radial-gradient(900px 520px at 92% 8%, rgba(255, 176, 76, 0.16), transparent 60%),
-    linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 58%, var(--bg-0) 100%);
+    radial-gradient(1200px 700px at 50% -12%, rgba(232, 163, 61, 0.16), transparent 64%),
+    radial-gradient(900px 520px at 12% 108%, rgba(139, 69, 19, 0.24), transparent 62%),
+    /* Coarse grain, then a fine one on top: two passes read as sawn timber
+       where a single repeating gradient reads as a barcode. */
+    repeating-linear-gradient(
+      92deg,
+      rgba(0, 0, 0, 0.16) 0 2px,
+      rgba(255, 255, 255, 0.012) 2px 5px,
+      rgba(0, 0, 0, 0.1) 5px 9px
+    ),
+    repeating-linear-gradient(
+      88deg,
+      rgba(0, 0, 0, 0.1) 0 11px,
+      rgba(255, 214, 150, 0.02) 11px 13px,
+      rgba(0, 0, 0, 0.06) 13px 27px
+    ),
+    linear-gradient(178deg, var(--cocoa-900) 0%, var(--cocoa-850) 48%, var(--cocoa-950) 100%);
   background-attachment: fixed;
-  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
@@ -42,8 +92,108 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-button {
+button,
+input,
+select {
   font-family: inherit;
+}
+
+/* ---------------------------------------------------------------- buttons */
+
+.btn {
+  --btn-face: linear-gradient(168deg, var(--wood-500) 0%, var(--wood-600) 55%, var(--cocoa-800) 100%);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.95rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  background: var(--btn-face);
+  color: var(--sand-200);
+  font-family: var(--font-ui);
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 222, 173, 0.16), 0 6px 14px rgba(8, 4, 1, 0.4);
+  transition: transform 140ms ease, filter 140ms ease, box-shadow 140ms ease;
+}
+
+.btn:hover:not(:disabled) {
+  filter: brightness(1.16);
+  transform: translateY(-1px);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 6px rgba(8, 4, 1, 0.5);
+}
+
+.btn:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--caramel);
+  outline-offset: 2px;
+}
+
+.btn--primary {
+  --btn-face: linear-gradient(168deg, var(--caramel) 0%, var(--caramel-dim) 60%, #7d4a12 100%);
+  color: #2b1706;
+  text-shadow: 0 1px 0 rgba(255, 236, 200, 0.35);
+}
+
+.btn--ghost {
+  --btn-face: transparent;
+  color: var(--muted);
+  box-shadow: none;
+}
+
+.btn--ghost:hover:not(:disabled) {
+  color: var(--sand-200);
+  background: var(--surface);
+}
+
+.btn--danger {
+  --btn-face: linear-gradient(168deg, #8c2f18 0%, #5c1d0d 100%);
+  color: #ffd9cb;
+}
+
+.btn[aria-pressed='true'] {
+  --btn-face: linear-gradient(168deg, var(--wood-200) 0%, var(--wood-400) 100%);
+  color: #2b1706;
+  border-color: var(--caramel);
+  box-shadow: inset 0 1px 0 rgba(255, 246, 224, 0.4), 0 0 0 1px rgba(232, 163, 61, 0.45),
+    0 6px 16px rgba(8, 4, 1, 0.45);
+}
+
+/* ------------------------------------------------------------------ panels */
+
+.plank {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background:
+    repeating-linear-gradient(
+      91deg,
+      rgba(0, 0, 0, 0.13) 0 3px,
+      rgba(255, 220, 165, 0.016) 3px 7px
+    ),
+    linear-gradient(168deg, rgba(74, 46, 21, 0.72), rgba(26, 16, 8, 0.86));
+  box-shadow: var(--shadow-lift), inset 0 1px 0 rgba(255, 222, 173, 0.09);
+}
+
+.heading {
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 .sr-only {

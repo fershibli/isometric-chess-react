@@ -1,0 +1,40 @@
+name: CI
+
+# Pull requests only. main is covered by the release workflow, which runs these
+# same checks before it publishes anything, and adding a branch-push trigger on
+# top would run every pull request twice.
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Lint, test, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+        env:
+          BASE_PATH: /${{ github.event.repository.name }}/

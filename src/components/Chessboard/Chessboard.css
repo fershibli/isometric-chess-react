@@ -1,14 +1,14 @@
 .board-stage {
   --tile-w: clamp(36px, 10.6cqw, 112px);
   --tile-h: calc(var(--tile-w) * var(--pitch));
-  --rim: calc(var(--tile-h) * 0.3);
-  --thick: calc(var(--tile-h) * 0.9);
+  --rim: calc(var(--tile-h) * 0.34);
+  --thick: calc(var(--tile-h) * 1);
   position: relative;
   /* Nine columns wide: eight squares plus the label gutters on the near edges. */
   width: calc(9 * var(--tile-w));
   margin: 0 auto;
   padding-top: calc(var(--tile-w) * 0.95);
-  padding-bottom: calc(var(--tile-h) * 2.2);
+  padding-bottom: calc(var(--tile-h) * 2.4);
 }
 
 .board {
@@ -21,13 +21,15 @@
 .board::before {
   content: '';
   position: absolute;
-  left: 6%;
-  top: 18%;
-  width: 88%;
+  left: 4%;
+  top: 20%;
+  width: 92%;
   height: calc(8 * var(--tile-h));
-  background: radial-gradient(ellipse at center, rgba(2, 4, 16, 0.6) 0%, rgba(2, 4, 16, 0) 72%);
-  filter: blur(14px);
+  background: radial-gradient(ellipse at center, rgba(6, 3, 1, 0.65) 0%, rgba(6, 3, 1, 0) 72%);
+  filter: blur(16px);
 }
+
+/* ------------------------------------------------------------- wooden frame */
 
 .board__slab {
   position: absolute;
@@ -48,7 +50,13 @@
 .board__slab-face--top {
   height: calc(100% - var(--thick));
   clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
-  background: linear-gradient(150deg, #4a3218 0%, #2f1f10 60%, #221609 100%);
+  background:
+    repeating-linear-gradient(
+      64deg,
+      rgba(0, 0, 0, 0.2) 0 3px,
+      rgba(255, 214, 150, 0.03) 3px 8px
+    ),
+    linear-gradient(152deg, #6b4423 0%, #43290f 58%, #2c1a08 100%);
 }
 
 .board__slab-face--left {
@@ -58,7 +66,7 @@
     50% 100%,
     0 calc((100% + var(--thick)) / 2)
   );
-  background: linear-gradient(180deg, #2a1b0d 0%, #150d05 100%);
+  background: linear-gradient(180deg, #40270f 0%, #1c1006 100%);
 }
 
 .board__slab-face--right {
@@ -68,7 +76,7 @@
     50% 100%,
     100% calc((100% + var(--thick)) / 2)
   );
-  background: linear-gradient(180deg, #1d1208 0%, #0d0803 100%);
+  background: linear-gradient(180deg, #2c1a08 0%, #120a03 100%);
 }
 
 .board__label {
@@ -85,10 +93,11 @@
     calc((var(--bx) - var(--by)) * var(--tile-w) / 2),
     calc((var(--bx) + var(--by)) * var(--tile-h) / 2)
   );
-  color: var(--muted);
-  font-size: clamp(0.62rem, 1.5vw, 0.85rem);
+  color: var(--faint);
+  font-family: var(--font-ui);
+  font-size: clamp(0.6rem, 1.5vw, 0.82rem);
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   pointer-events: none;
 }

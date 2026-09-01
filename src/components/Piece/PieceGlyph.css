@@ -1,0 +1,36 @@
+/*
+ * The gradient is painted into the text box and then clipped to the glyph, so
+ * the piece reads as carved amber or espresso rather than flat coloured text.
+ * The stroke is what keeps a dark piece legible on a dark square.
+ */
+.glyph {
+  display: inline-block;
+  font-family: 'Segoe UI Symbol', 'Apple Symbols', 'Noto Sans Symbols 2', 'DejaVu Sans', serif;
+  line-height: 1;
+  background-image: linear-gradient(
+    177deg,
+    rgba(var(--glyph-top), 1) 0%,
+    rgba(var(--glyph-mid), 1) 46%,
+    rgba(var(--glyph-bottom), 1) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: var(--glyph-rim-width, 0.6px) var(--glyph-rim);
+  paint-order: stroke fill;
+}
+
+.glyph--light {
+  --glyph-top: 255, 250, 240;
+  --glyph-mid: 244, 214, 158;
+  --glyph-bottom: 200, 124, 38;
+  --glyph-rim: rgba(66, 34, 8, 0.72);
+}
+
+.glyph--dark {
+  --glyph-top: 173, 121, 72;
+  --glyph-mid: 92, 53, 24;
+  --glyph-bottom: 20, 11, 5;
+  --glyph-rim: rgba(233, 201, 150, 0.5);
+}

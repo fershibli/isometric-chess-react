@@ -1,12 +1,12 @@
 import './ViewControls.css'
 
-const PITCHES = [
+const FALLBACK = [
   { value: 0.42, label: 'Low' },
   { value: 0.56, label: 'Mid' },
   { value: 0.7, label: 'High' },
 ]
 
-export default function ViewControls({ rotation, pitch, onRotate, onPitch }) {
+export default function ViewControls({ rotation, pitch, pitches = FALLBACK, onRotate, onPitch }) {
   return (
     <div className="view" role="group" aria-label="Board view">
       <div className="view__group">
@@ -28,7 +28,7 @@ export default function ViewControls({ rotation, pitch, onRotate, onPitch }) {
         </button>
       </div>
       <div className="view__group" role="group" aria-label="Camera angle">
-        {PITCHES.map((option) => (
+        {pitches.map((option) => (
           <button
             key={option.label}
             type="button"

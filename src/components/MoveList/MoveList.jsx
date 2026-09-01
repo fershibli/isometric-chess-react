@@ -27,7 +27,7 @@ export default function MoveList({ history }) {
 
   return (
     <section className="moves" aria-label="Move history">
-      <h2 className="panel__heading">Moves</h2>
+      <h2 className="heading">Moves</h2>
       <div className="moves__scroll" ref={scrollRef}>
         {pairs.length === 0 ? (
           <p className="moves__empty">No moves yet. White opens.</p>

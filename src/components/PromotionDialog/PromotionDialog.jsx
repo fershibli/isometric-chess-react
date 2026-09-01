@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import PieceArt from '../Piece/PieceArt'
+import PieceGlyph from '../Piece/PieceGlyph'
 import { PIECE_NAMES, PROMOTION_CHOICES, colorName } from '../../chess/pieces'
 import './PromotionDialog.css'
 
@@ -40,7 +40,7 @@ export default function PromotionDialog({ color, square, onSelect, onCancel }) {
                 ref={index === 0 ? firstRef : null}
                 onClick={() => onSelect(type)}
               >
-                <PieceArt type={type} tone={color === 'w' ? 'light' : 'dark'} />
+                <PieceGlyph type={type} color={color} className="promo__glyph" />
                 <span className="promo__name">{PIECE_NAMES[type]}</span>
               </button>
             </li>

@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Tile from '../Tile/Tile'
-import PieceDefs from '../Piece/PieceDefs'
+import MoveTrails from '../MoveTrails/MoveTrails'
+import { rippleLifetime, wavePhase } from '../../board/water'
 import {
   SIZE,
   clampRC,
@@ -37,16 +38,40 @@ export default function Chessboard({
   rotation = 0,
   pitch = 0.5,
   intro = false,
+  water = 1,
+  showTrails = true,
+  showCoordinates = true,
   onSelectSquare,
   onClearSelection,
 }) {
   const [focusRC, setFocusRC] = useState(() => rcFromSquare('e2'))
+  const [ripple, setRipple] = useState(null)
+
+  // chess.js stamps every verbose move with the position it produced, which
+  // makes a cheap identity for "a piece just landed" that undo and redo also
+  // get right.
+  const landingId = lastMove?.after ?? null
+
+  useEffect(() => {
+    if (!landingId || !lastMove) return undefined
+    const { row, col } = rcFromSquare(lastMove.to)
+    setRipple({ row, col, id: landingId })
+    const timer = window.setTimeout(() => setRipple(null), rippleLifetime())
+    return () => window.clearTimeout(timer)
+    // Only the identity matters here; `lastMove` is read for its square.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [landingId])
 
   const layout = useMemo(() => {
     const squares = []
     for (let row = 0; row < SIZE; row += 1) {
       for (let col = 0; col < SIZE; col += 1) {
-        squares.push({ row, col, ...projectRC(row, col, rotation) })
+        squares.push({
+          row,
+          col,
+          ...projectRC(row, col, rotation),
+          wave: wavePhase(row, col),
+        })
       }
     }
 
@@ -70,11 +95,14 @@ export default function Chessboard({
     if (delta) moveFocus(event, delta)
   }
 
+  const boardClasses = ['board']
+  if (intro) boardClasses.push('board--intro')
+  if (water <= 0) boardClasses.push('board--calm')
+
   return (
     <div className="board-stage" style={{ '--pitch': pitch }}>
-      <PieceDefs />
       <div
-        className={`board${intro ? ' board--intro' : ''}`}
+        className={boardClasses.join(' ')}
         role="group"
         aria-label="Chessboard"
         aria-describedby="board-help"
@@ -86,20 +114,27 @@ export default function Chessboard({
           <span className="board__slab-face board__slab-face--top" />
         </div>
 
-        {layout.labels.map((label) => (
-          <span
-            key={label.key}
-            className="board__label"
-            aria-hidden="true"
-            style={{ '--bx': label.bx, '--by': label.by }}
-          >
-            {label.text}
-          </span>
-        ))}
+        {showCoordinates
+          ? layout.labels.map((label) => (
+              <span
+                key={label.key}
+                className="board__label"
+                aria-hidden="true"
+                style={{ '--bx': label.bx, '--by': label.by }}
+              >
+                {label.text}
+              </span>
+            ))
+          : null}
 
-        {layout.squares.map(({ row, col, bx, by, depth }) => {
+        {showTrails ? (
+          <MoveTrails selected={selected} targets={legalTargets} rotation={rotation} />
+        ) : null}
+
+        {layout.squares.map(({ row, col, bx, by, depth, wave }) => {
           const square = squareFromRC(row, col)
           const target = legalTargets.get(square)
+          const isLanding = lastMove?.to === square
           return (
             <Tile
               key={square}
@@ -116,6 +151,11 @@ export default function Chessboard({
               bx={bx}
               by={by}
               depth={depth}
+              wave={wave}
+              ripple={ripple}
+              rippleStrength={water}
+              landingKey={isLanding ? landingId : 'still'}
+              isLanding={isLanding && !intro}
               delay={depth * 45}
               isFocusTarget={focusRC.row === row && focusRC.col === col}
               onSelect={onSelectSquare}

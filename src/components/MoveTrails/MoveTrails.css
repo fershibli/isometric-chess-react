@@ -1,0 +1,55 @@
+.trails {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* Tiles stack by depth so a piece nearer the viewer paints over the one
+     behind it, which leaves no z-index between "above every square" and
+     "below every piece". The trails go above the lot; they are thin enough
+     that crossing a piece reads as a line passing in front of it. */
+  z-index: 40;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.trails__path {
+  fill: none;
+  stroke: var(--water);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 5 8;
+  filter: drop-shadow(0 0 4px rgba(127, 200, 192, 0.75));
+  opacity: 0;
+  /* Fades in on a stagger so the fan of options reads outward from the piece,
+     then the dashes crawl towards the target for as long as it stays picked up. */
+  animation: trail-in 320ms ease forwards, trail-march 900ms linear infinite;
+  animation-delay: var(--trail-delay), var(--trail-delay);
+}
+
+.trails__path--capture {
+  stroke: #ff9d76;
+  stroke-dasharray: 3 6;
+  filter: drop-shadow(0 0 5px rgba(217, 85, 47, 0.85));
+}
+
+@keyframes trail-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.72;
+  }
+}
+
+@keyframes trail-march {
+  to {
+    stroke-dashoffset: -13;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trails__path {
+    opacity: 0.55;
+    animation: none;
+  }
+}

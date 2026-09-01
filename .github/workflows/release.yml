@@ -1,0 +1,122 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Never cancel a release halfway: a cancelled run can leave a tag pushed with
+# no deployment behind it.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  check:
+    name: Lint, test, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+        env:
+          BASE_PATH: /${{ github.event.repository.name }}/
+
+  release:
+    name: Version and tag
+    needs: check
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+      released: ${{ steps.version.outputs.released }}
+    steps:
+      # The version is derived from the commits since the last tag, so the
+      # whole history and every tag has to be present.
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Work out the next version
+        id: version
+        run: |
+          LEVEL="$(node scripts/semver.mjs level)"
+          VERSION="$(node scripts/semver.mjs next)"
+          echo "level=$LEVEL" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+          if [ "$LEVEL" = "none" ] || git rev-parse -q --verify "refs/tags/v$VERSION" >/dev/null; then
+            echo "released=false" >> "$GITHUB_OUTPUT"
+            echo "Nothing new since v$VERSION — deploying the existing version."
+          else
+            echo "released=true" >> "$GITHUB_OUTPUT"
+          fi
+          node scripts/semver.mjs notes > release-notes.md
+
+      - name: Tag and publish the release
+        if: steps.version.outputs.released == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          node scripts/semver.mjs apply
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json
+          git commit -m "chore(release): $TAG"
+          git tag -a "$TAG" -m "$TAG"
+          # Pushes made with GITHUB_TOKEN do not start another workflow run,
+          # so this cannot loop back into itself.
+          git push origin HEAD:main --follow-tags
+          gh release create "$TAG" --title "$TAG" --notes-file release-notes.md
+
+  deploy:
+    name: Deploy to Pages
+    needs: release
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # Build the tag that was just published, not the branch tip: main may
+      # already have moved on.
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.release.outputs.released == 'true' && needs.release.outputs.tag || github.sha }}
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build the site
+        run: npm run build
+        env:
+          BASE_PATH: /${{ github.event.repository.name }}/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -2,49 +2,49 @@
   display: flex;
   align-items: center;
   gap: 0.7rem;
-  padding: 0.85rem 1rem;
+  padding: 0.75rem 0.95rem;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 12px;
   background: var(--surface);
 }
 
 .status--check {
-  border-color: rgba(248, 113, 113, 0.5);
-  background: rgba(248, 113, 113, 0.12);
+  border-color: rgba(217, 85, 47, 0.55);
+  background: rgba(217, 85, 47, 0.16);
 }
 
 .status--over {
-  border-color: rgba(94, 234, 212, 0.5);
-  background: rgba(94, 234, 212, 0.12);
+  border-color: rgba(232, 163, 61, 0.6);
+  background: rgba(232, 163, 61, 0.14);
 }
 
 .status__dot {
-  width: 0.95rem;
-  height: 0.95rem;
+  width: 0.9rem;
+  height: 0.9rem;
   flex: none;
   border-radius: 50%;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.45);
 }
 
 .status__dot--white {
-  background: linear-gradient(160deg, #fffaf0, #f0c079);
+  background: linear-gradient(160deg, #fffaf0, #d99b3e);
 }
 
 .status__dot--black {
-  background: linear-gradient(160deg, #8f8ae8, #241b62);
+  background: linear-gradient(160deg, #8a5a30, #150b04);
 }
 
 .status__text {
   flex: 1;
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.98rem;
   font-weight: 600;
-  letter-spacing: 0.01em;
 }
 
 .status__move {
-  color: var(--muted);
-  font-size: 0.78rem;
+  color: var(--faint);
+  font-family: var(--font-ui);
+  font-size: 0.74rem;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }

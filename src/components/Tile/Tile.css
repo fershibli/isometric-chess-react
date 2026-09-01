@@ -13,8 +13,8 @@
     calc((var(--bx) - var(--by)) * var(--tile-w) / 2),
     calc((var(--bx) + var(--by)) * var(--tile-h) / 2)
   );
-  /* Only the clipped diamond and the piece art accept pointer input, so a click
-     always resolves to the square drawn under the cursor. */
+  /* Only the clipped diamond and the lower body of a piece accept pointer
+     input, so a click always resolves to the square drawn under the cursor. */
   pointer-events: none;
 }
 
@@ -25,36 +25,63 @@
   pointer-events: auto;
   touch-action: manipulation;
   cursor: pointer;
-  transition: filter 140ms ease, background-color 140ms ease;
+  transition: filter 160ms ease, background-color 160ms ease;
+  /* The idle swell. Each square is a different distance through the same loop,
+     which is what stops eight ranks of wood from moving as one plank. */
+  animation: tile-swell 7.5s ease-in-out infinite;
+  animation-delay: calc(var(--wave) * 1.5s);
+  will-change: transform;
 }
 
 .tile--light .tile__face {
-  background: linear-gradient(155deg, #f6e6c8 0%, #e0c69c 55%, #cbab7d 100%);
+  background: linear-gradient(158deg, #f4e0be 0%, var(--sand-300) 52%, #c49a68 100%);
 }
 
 .tile--dark .tile__face {
-  background: linear-gradient(155deg, #8d6743 0%, #6b4a2b 55%, #4f351d 100%);
+  background: linear-gradient(158deg, #a4551c 0%, var(--wood-400) 48%, #5d2e0d 100%);
+}
+
+/* A slow band of light crossing the square: still water, seen from above. */
+.tile__sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    118deg,
+    transparent 34%,
+    rgba(255, 246, 224, 0.16) 47%,
+    rgba(160, 226, 220, 0.13) 53%,
+    transparent 66%
+  );
+  opacity: 0.55;
+  mix-blend-mode: soft-light;
+  animation: tile-sheen 11s ease-in-out infinite;
+  animation-delay: calc(var(--wave) * 2.2s);
+  pointer-events: none;
 }
 
 .tile__face:hover {
-  filter: brightness(1.14);
+  filter: brightness(1.15) saturate(1.05);
 }
 
 .tile--last .tile__face {
-  background-image: linear-gradient(155deg, rgba(94, 234, 212, 0.55), rgba(45, 212, 191, 0.3));
+  background-image: linear-gradient(158deg, rgba(232, 163, 61, 0.5), rgba(184, 118, 31, 0.28));
 }
 
 .tile--selected .tile__face {
-  background-image: linear-gradient(155deg, rgba(255, 199, 90, 0.85), rgba(245, 158, 11, 0.6));
+  background-image: linear-gradient(158deg, rgba(255, 214, 130, 0.9), rgba(220, 140, 30, 0.62));
+}
+
+.tile--move .tile__face {
+  background-image: linear-gradient(158deg, rgba(127, 200, 192, 0.34), rgba(47, 123, 120, 0.2));
 }
 
 .tile--capture .tile__face {
-  background-image: linear-gradient(155deg, rgba(248, 113, 113, 0.7), rgba(220, 38, 38, 0.45));
+  background-image: linear-gradient(158deg, rgba(217, 85, 47, 0.68), rgba(140, 40, 14, 0.44));
 }
 
 .tile--check .tile__face {
-  background-image: linear-gradient(155deg, rgba(239, 68, 68, 0.85), rgba(153, 27, 27, 0.7));
-  animation: tile-check 1.4s ease-in-out infinite;
+  background-image: linear-gradient(158deg, rgba(217, 85, 47, 0.9), rgba(104, 24, 6, 0.75));
+  animation: tile-swell 7.5s ease-in-out infinite, tile-check 1.4s ease-in-out infinite;
 }
 
 .tile:focus-visible {
@@ -63,9 +90,11 @@
 }
 
 .tile:focus-visible .tile__face {
-  box-shadow: inset 0 0 0 3px #67e8f9;
+  box-shadow: inset 0 0 0 3px var(--caramel);
   filter: brightness(1.2);
 }
+
+/* --------------------------------------------------------------- overlays */
 
 .tile__dot,
 .tile__ring,
@@ -78,37 +107,81 @@
 }
 
 .tile__dot {
-  width: calc(var(--tile-w) * 0.24);
-  height: calc(var(--tile-h) * 0.24);
+  width: calc(var(--tile-w) * 0.22);
+  height: calc(var(--tile-h) * 0.22);
   border-radius: 50%;
-  background: radial-gradient(circle, #ecfeff 0%, #22d3ee 70%, rgba(34, 211, 238, 0.35) 100%);
-  box-shadow: 0 0 10px rgba(34, 211, 238, 0.8);
+  background: radial-gradient(circle, #f3fffd 0%, var(--water) 62%, rgba(127, 200, 192, 0.2) 100%);
+  box-shadow: 0 0 12px rgba(127, 200, 192, 0.75);
+  animation: target-pulse 2.1s ease-in-out infinite;
+  animation-delay: calc(var(--wave) * 0.32s);
 }
 
 .tile__ring {
   width: calc(var(--tile-w) * 0.62);
   height: calc(var(--tile-h) * 0.62);
-  border: 2px solid #fecdd3;
+  border: 2px solid #ffd2bd;
   border-radius: 50%;
-  box-shadow: 0 0 12px rgba(244, 63, 94, 0.75);
+  box-shadow: 0 0 14px rgba(217, 85, 47, 0.8);
+  animation: target-ring 1.5s ease-out infinite;
 }
 
 .tile__shadow {
-  width: calc(var(--tile-w) * 0.46);
-  height: calc(var(--tile-h) * 0.46);
+  width: calc(var(--tile-w) * 0.5);
+  height: calc(var(--tile-h) * 0.5);
   border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(15, 12, 30, 0.5) 0%, rgba(15, 12, 30, 0) 70%);
+  background: radial-gradient(ellipse, rgba(20, 10, 2, 0.55) 0%, rgba(20, 10, 2, 0) 70%);
+  transition: width 220ms ease, height 220ms ease, opacity 220ms ease, filter 220ms ease;
 }
 
+/* The shadow spreads and softens as the piece leaves the board — the only cue
+   that says "held" rather than "highlighted". */
+.tile__shadow--lifted {
+  width: calc(var(--tile-w) * 0.74);
+  height: calc(var(--tile-h) * 0.74);
+  opacity: 0.72;
+  filter: blur(3px);
+}
+
+/* ------------------------------------------------------------------- intro */
+
 .board--intro .tile__face {
-  animation: tile-emerge 520ms ease backwards;
-  animation-delay: var(--tile-delay);
+  animation: tile-emerge 560ms ease backwards, tile-swell 7.5s ease-in-out 900ms infinite;
+  animation-delay: var(--tile-delay), calc(900ms + var(--wave) * 1.5s);
+}
+
+.board--intro .piece {
+  animation: piece-land 640ms cubic-bezier(0.3, 1.4, 0.5, 1) backwards;
+  animation-delay: calc(var(--tile-delay) + 220ms);
+}
+
+/* --------------------------------------------------------------- keyframes */
+
+@keyframes tile-swell {
+  0%,
+  100% {
+    transform: translate3d(0, -0.9px, 0);
+  }
+  50% {
+    transform: translate3d(0, 0.9px, 0);
+  }
+}
+
+@keyframes tile-sheen {
+  0%,
+  100% {
+    opacity: 0.24;
+    transform: translate3d(-6%, 0, 0);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translate3d(6%, 0, 0);
+  }
 }
 
 @keyframes tile-emerge {
   from {
     opacity: 0;
-    transform: translateY(-14px);
+    transform: translateY(-16px);
   }
 }
 
@@ -118,9 +191,43 @@
   }
 }
 
+@keyframes target-pulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(0.82);
+    opacity: 0.72;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.14);
+    opacity: 1;
+  }
+}
+
+@keyframes target-ring {
+  0% {
+    transform: translate(-50%, -50%) scale(0.72);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.18);
+    opacity: 0.35;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .tile__face,
+  .tile__sheen,
+  .tile__dot,
+  .tile__ring,
+  .tile--check .tile__face,
   .board--intro .tile__face,
-  .tile--check .tile__face {
+  .board--intro .piece {
     animation: none;
   }
+}
+
+/* Water can be turned off in settings; the wood underneath stays. */
+.board--calm .tile__face,
+.board--calm .tile__sheen {
+  animation: none;
 }

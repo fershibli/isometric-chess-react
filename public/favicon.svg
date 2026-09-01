@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <rect width="32" height="32" rx="6" fill="#1a1a2e"/>
-  <text x="16" y="23" text-anchor="middle" font-size="18" fill="#deb887">♞</text>
+  <rect width="32" height="32" rx="6" fill="#2a1a0d"/>
+  <rect x="2" y="2" width="28" height="28" rx="4" fill="none" stroke="#8b4513" stroke-width="1.5"/>
+  <text x="16" y="24" text-anchor="middle" font-size="19" fill="#deb887">♞</text>
 </svg>
