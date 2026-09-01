@@ -11,7 +11,6 @@ import CapturedPieces from '../CapturedPieces/CapturedPieces'
 import MoveList from '../MoveList/MoveList'
 import PromotionDialog from '../PromotionDialog/PromotionDialog'
 import ViewControls from '../ViewControls/ViewControls'
-import PieceDefs from '../Piece/PieceDefs'
 import './ChessPage.css'
 
 const INTRO_MS = 1900
@@ -52,8 +51,6 @@ export default function ChessPage() {
 
   return (
     <div className="page">
-      <PieceDefs />
-
       <header className="page__header">
         <div>
           <p className="page__eyebrow">
