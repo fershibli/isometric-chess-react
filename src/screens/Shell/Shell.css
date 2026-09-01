@@ -1,0 +1,175 @@
+.shell {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: clamp(1rem, 4vw, 3rem);
+  animation: shell-in 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes shell-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+}
+
+.shell__card {
+  width: min(34rem, 100%);
+  padding: clamp(1.4rem, 4vw, 2.4rem);
+  text-align: center;
+}
+
+.shell__eyebrow {
+  margin: 0 0 0.4rem;
+  color: var(--faint);
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.shell__title {
+  margin: 0;
+  font-size: clamp(1.7rem, 5.5vw, 2.7rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  background-image: linear-gradient(176deg, var(--sand-100) 0%, var(--caramel) 58%, #8a4a10 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.shell__hint {
+  margin: 0.5rem auto 0;
+  max-width: 30rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.shell__body {
+  margin-top: clamp(1.1rem, 3vw, 1.8rem);
+  text-align: left;
+}
+
+.shell__back {
+  margin-top: 1.4rem;
+}
+
+/* --------------------------------------------------- shared screen widgets */
+
+.menu-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.btn.big-btn {
+  display: grid;
+  grid-template-columns: 1.9rem 1fr;
+  justify-content: start;
+  justify-items: start;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.big-btn__glyph {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.big-btn__label {
+  display: block;
+  font-size: 1rem;
+}
+
+.big-btn__hint {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--faint);
+  font-family: var(--font-ui);
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.btn--primary .big-btn__hint {
+  color: rgba(43, 23, 6, 0.72);
+}
+
+.field {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1.15rem;
+}
+
+.field__label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.field__note {
+  margin: 0;
+  color: var(--faint);
+  font-size: 0.8rem;
+}
+
+.choice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.choice-row .btn {
+  flex: 1 1 6rem;
+}
+
+.code-box {
+  width: 100%;
+  min-height: 6.5rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(10, 6, 2, 0.6);
+  color: var(--sand-200);
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  resize: vertical;
+  word-break: break-all;
+}
+
+.code-box:focus-visible {
+  outline: 2px solid var(--caramel);
+  outline-offset: 1px;
+}
+
+.notice {
+  margin: 0 0 1rem;
+  padding: 0.6rem 0.8rem;
+  border-left: 3px solid var(--caramel);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.notice--error {
+  border-left-color: var(--ember);
+  color: #ffbfa8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shell {
+    animation: none;
+  }
+}

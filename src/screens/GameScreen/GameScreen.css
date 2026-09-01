@@ -1,0 +1,113 @@
+.game {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: clamp(0.8rem, 2.2vw, 1.5rem);
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: clamp(0.8rem, 2.6vw, 1.9rem);
+  animation: game-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes game-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.game__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.game__eyebrow {
+  margin: 0 0 0.1rem;
+  color: var(--faint);
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.game__title {
+  margin: 0;
+  font-size: clamp(1.3rem, 3.4vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  background-image: linear-gradient(176deg, var(--sand-100) 0%, var(--caramel) 62%, #8a4a10 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.game__pause {
+  gap: 0.55rem;
+}
+
+.game__key {
+  padding: 0.1rem 0.35rem;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--faint);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+}
+
+.game__main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 19rem);
+  gap: clamp(1rem, 2.4vw, 2rem);
+  align-items: start;
+}
+
+.game__board {
+  display: grid;
+  place-items: center;
+  align-self: center;
+  min-width: 0;
+  /* The board sizes itself from this column, never from the viewport, so it
+     cannot grow into the side panel. */
+  container-type: inline-size;
+}
+
+.game__notice {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid var(--caramel);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.panel {
+  display: grid;
+  gap: 0.8rem;
+  padding: 0.95rem;
+}
+
+@media (max-width: 1000px) {
+  .game__main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .panel {
+    order: 2;
+  }
+}
+
+@media (min-width: 1001px) {
+  .panel {
+    position: sticky;
+    top: clamp(0.8rem, 2.6vw, 1.9rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game {
+    animation: none;
+  }
+}

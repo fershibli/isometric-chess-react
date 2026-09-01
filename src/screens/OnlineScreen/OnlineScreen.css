@@ -1,0 +1,42 @@
+.code-box--single {
+  min-height: 0;
+  font-size: 1.1rem;
+  letter-spacing: 0.28em;
+  text-align: center;
+}
+
+.waiting {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.waiting__dots {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--caramel);
+  box-shadow: 0 0 10px rgba(232, 163, 61, 0.8);
+  animation: waiting-pulse 1.3s ease-in-out infinite;
+}
+
+@keyframes waiting-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.7);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .waiting__dots {
+    animation: none;
+  }
+}
