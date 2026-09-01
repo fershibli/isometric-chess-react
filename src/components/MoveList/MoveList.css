@@ -5,12 +5,12 @@
 }
 
 .moves__scroll {
-  max-height: 13rem;
+  max-height: 12rem;
   overflow-y: auto;
   padding-right: 0.25rem;
   border: 1px solid var(--border);
   border-radius: 12px;
-  background: rgba(6, 10, 26, 0.45);
+  background: rgba(10, 6, 2, 0.42);
 }
 
 .moves__list {
@@ -30,28 +30,29 @@
 }
 
 .moves__row:nth-child(odd) {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(222, 184, 135, 0.05);
 }
 
 .moves__number {
-  color: var(--muted);
-  font-size: 0.76rem;
+  color: var(--faint);
+  font-size: 0.74rem;
 }
 
 .moves__san {
-  font-size: 0.88rem;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 0.84rem;
   font-weight: 500;
-  font-family: 'SFMono-Regular', ui-monospace, 'Cascadia Mono', Menlo, monospace;
+  color: var(--sand-200);
 }
 
 .moves__san--current {
-  color: var(--accent);
+  color: var(--caramel);
   font-weight: 700;
 }
 
 .moves__empty {
   margin: 0;
   padding: 1.1rem 0.9rem;
-  color: var(--muted);
+  color: var(--faint);
   font-size: 0.85rem;
 }
