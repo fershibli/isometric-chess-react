@@ -87,10 +87,13 @@ const PHASE_TOTAL = 24
 
 const ABORT = Symbol('search aborted')
 
+// `think` is how long the reply should appear to take, min and max in
+// milliseconds. It is a presentation choice, not a search budget: the search
+// runs for `budgetMs` and the wait absorbs however long that actually took.
 export const LEVELS = {
-  casual: { label: 'Casual', depth: 1, jitter: 90, budgetMs: 350 },
-  club: { label: 'Club', depth: 2, jitter: 25, budgetMs: 900 },
-  sharp: { label: 'Sharp', depth: 3, jitter: 0, budgetMs: 2200 },
+  casual: { label: 'Casual', depth: 1, jitter: 90, budgetMs: 350, think: [450, 1000] },
+  club: { label: 'Club', depth: 2, jitter: 25, budgetMs: 900, think: [700, 1600] },
+  sharp: { label: 'Sharp', depth: 3, jitter: 0, budgetMs: 2200, think: [1000, 2300] },
 }
 
 export const DEFAULT_LEVEL = 'club'

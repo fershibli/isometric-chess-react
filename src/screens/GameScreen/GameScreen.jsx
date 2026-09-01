@@ -168,6 +168,7 @@ export default function GameScreen({ session, settings, onSettings, onExit }) {
           <Chessboard
             board={game.board}
             selected={game.selected}
+            held={engine.holding}
             legalTargets={game.legalTargets}
             lastMove={game.lastMove}
             checkedKing={game.checkedKing}

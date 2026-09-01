@@ -1,13 +1,28 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { chooseMove, DEFAULT_LEVEL, LEVELS } from './engine'
 
-// A short pause before the reply lands: an instant answer reads as a glitch.
-const MIN_THINK_MS = 380
+const FALLBACK_THINK = [450, 1000]
+
+// How long the piece stays in the air between being picked up and being put
+// down. Unlike the thinking pause this is a physical gesture, not a decision,
+// so it barely varies.
+const HOLD_MS = [300, 480]
+
+function between([min, max], rng) {
+  return min + rng() * (max - min)
+}
 
 /**
- * Plays the given colour with the built-in engine. The search runs off a timer
- * so the board can paint the "thinking" state first, and a reply is discarded
- * if the position moved on (undo, reset, a new opponent choice) meanwhile.
+ * Plays the given colour with the built-in engine.
+ *
+ * A reply lands in two beats: the engine picks the piece up, and only after a
+ * pause does it put it down. Watching a piece appear on its destination reads
+ * as a glitch; watching one lift, hang for a moment and land reads as an
+ * opponent moving it. The thinking pause before the lift is drawn fresh each
+ * time — a real opponent does not answer on a metronome.
+ *
+ * The search itself runs off a timer so the board can paint first, and a reply
+ * is discarded if the position moved on (undo, reset, a pause) meanwhile.
  */
 export function useEngineOpponent({
   side,
@@ -17,8 +32,10 @@ export function useEngineOpponent({
   isGameOver,
   paused,
   onMove,
+  rng = Math.random,
 }) {
   const onMoveRef = useRef(onMove)
+  const [holding, setHolding] = useState(null)
   const active = Boolean(side) && side === turn && !isGameOver && !paused
 
   useEffect(() => {
@@ -26,30 +43,49 @@ export function useEngineOpponent({
   }, [onMove])
 
   useEffect(() => {
-    if (!active) return undefined
+    if (!active) {
+      setHolding(null)
+      return undefined
+    }
 
     let cancelled = false
-    let later = 0
+    let drop = 0
+    let lift = 0
     const settings = LEVELS[level] ?? LEVELS[DEFAULT_LEVEL]
     const started = Date.now()
+    const thinkFor = between(settings.think ?? FALLBACK_THINK, rng)
+    const holdFor = between(HOLD_MS, rng)
 
-    const timer = window.setTimeout(() => {
+    const search = window.setTimeout(() => {
       const reply = chooseMove(fen, settings)
-      if (cancelled) return
-      const wait = Math.max(0, MIN_THINK_MS - (Date.now() - started))
+      if (cancelled || !reply) return
 
-      later = window.setTimeout(() => {
-        if (cancelled) return
-        if (reply) onMoveRef.current(reply.from, reply.to, reply.promotion)
-      }, wait)
+      // A slow search has already spent the thinking pause; only what is left
+      // of it is waited out.
+      lift = window.setTimeout(
+        () => {
+          if (cancelled) return
+          setHolding(reply.from)
+
+          drop = window.setTimeout(() => {
+            if (cancelled) return
+            onMoveRef.current(reply.from, reply.to, reply.promotion)
+            setHolding(null)
+          }, holdFor)
+        },
+        Math.max(0, thinkFor - (Date.now() - started)),
+      )
     }, 30)
 
     return () => {
       cancelled = true
-      window.clearTimeout(timer)
-      window.clearTimeout(later)
+      window.clearTimeout(search)
+      window.clearTimeout(lift)
+      window.clearTimeout(drop)
     }
+    // `rng` is sampled once per reply and must not restart the sequence.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active, fen, level])
 
-  return { thinking: active }
+  return { thinking: active && !holding, holding }
 }
