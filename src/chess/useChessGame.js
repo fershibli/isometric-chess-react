@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Chess } from 'chess.js'
 import { squareFromRC } from './geometry'
 import { capturedPieces, materialBalance } from './material'
@@ -58,12 +58,23 @@ function snapshot(game) {
   }
 }
 
-export function useChessGame(initialFen) {
+/**
+ * `onLocalMove` fires for moves this player made, and only those. Moves that
+ * arrive from an opponent — the engine, or a peer over the wire — go through
+ * `playRemoteMove`, which stays silent so an online game cannot echo a move
+ * back to the player who sent it.
+ */
+export function useChessGame(initialFen, { onLocalMove } = {}) {
   const [game] = useState(() => createGame(initialFen))
   const [state, setState] = useState(() => snapshot(game))
   const [selected, setSelected] = useState(null)
   const [pendingPromotion, setPendingPromotion] = useState(null)
   const [redoStack, setRedoStack] = useState([])
+  const localMoveRef = useRef(onLocalMove)
+
+  useEffect(() => {
+    localMoveRef.current = onLocalMove
+  }, [onLocalMove])
 
   const sync = useCallback(() => setState(snapshot(game)), [game])
 
@@ -71,8 +82,8 @@ export function useChessGame(initialFen) {
   // square alone would keep serving targets from the position before the move.
   const legalTargets = selected ? buildTargets(game, selected) : NO_TARGETS
 
-  const applyMove = useCallback(
-    (from, to, promotion) => {
+  const commit = useCallback(
+    (from, to, promotion, local) => {
       try {
         game.move(promotion ? { from, to, promotion } : { from, to })
       } catch {
@@ -82,9 +93,20 @@ export function useChessGame(initialFen) {
       setPendingPromotion(null)
       setRedoStack([])
       sync()
+      if (local) localMoveRef.current?.({ from, to, promotion })
       return true
     },
     [game, sync],
+  )
+
+  const applyMove = useCallback(
+    (from, to, promotion) => commit(from, to, promotion, true),
+    [commit],
+  )
+
+  const playRemoteMove = useCallback(
+    (from, to, promotion) => commit(from, to, promotion, false),
+    [commit],
   )
 
   const selectSquare = useCallback(
@@ -186,6 +208,7 @@ export function useChessGame(initialFen) {
     pendingPromotion,
     canUndo: state.history.length > 0,
     canRedo: redoStack.length > 0,
+    playRemoteMove,
     selectSquare,
     clearSelection,
     playMove: applyMove,
