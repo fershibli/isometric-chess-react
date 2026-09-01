@@ -1,4 +1,5 @@
 import Shell from '../Shell/Shell'
+import { APP_VERSION } from '../../app/version'
 import './MenuScreen.css'
 
 const ENTRIES = [
@@ -43,6 +44,8 @@ export default function MenuScreen({ onChoose }) {
           </button>
         ))}
       </nav>
+
+      <p className="menu-version">v{APP_VERSION}</p>
     </Shell>
   )
 }

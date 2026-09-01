@@ -19,7 +19,9 @@
     "preview": "vite preview",
     "lint": "oxlint",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "version:next": "node scripts/semver.mjs next",
+    "version:notes": "node scripts/semver.mjs notes"
   },
   "dependencies": {
     "chess.js": "^1.4.0",

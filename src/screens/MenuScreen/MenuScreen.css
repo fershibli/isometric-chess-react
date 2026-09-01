@@ -33,3 +33,12 @@
     animation: none;
   }
 }
+
+.menu-version {
+  margin: 1.2rem 0 0;
+  color: var(--faint);
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-align: center;
+}
