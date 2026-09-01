@@ -87,10 +87,13 @@ const PHASE_TOTAL = 24
 
 const ABORT = Symbol('search aborted')
 
+// `think` is how long the reply should appear to take, min and max in
+// milliseconds. It is a presentation choice, not a search budget: the search
+// runs for `budgetMs` and the wait absorbs however long that actually took.
 export const LEVELS = {
-  casual: { label: 'Casual', depth: 1, jitter: 90, budgetMs: 350 },
-  club: { label: 'Club', depth: 2, jitter: 25, budgetMs: 900 },
-  sharp: { label: 'Sharp', depth: 3, jitter: 0, budgetMs: 2200 },
+  casual: { label: 'Casual', depth: 1, jitter: 90, budgetMs: 350, think: [450, 1000] },
+  club: { label: 'Club', depth: 2, jitter: 25, budgetMs: 900, think: [700, 1600] },
+  sharp: { label: 'Sharp', depth: 3, jitter: 0, budgetMs: 2200, think: [1000, 2300] },
 }
 
 export const DEFAULT_LEVEL = 'club'
@@ -246,11 +249,18 @@ export function chooseMove(fen, options = {}) {
   if (legal.length === 0) return null
 
   const deadline = budgetMs > 0 ? Date.now() + budgetMs : 0
-  let ranked = [{ move: legal[0], score: 0 }]
+
+  // What gets played if even the first iteration is cut off — a slow device, a
+  // tight budget, a busy tab. Sorting by the same cheap heuristic the search
+  // uses means the fallback is the most promising capture rather than whatever
+  // move generation happened to emit first.
+  let ranked = ordered(legal).map((move) => ({ move, score: 0 }))
+  let searched = false
 
   for (let level = 1; level <= depth; level += 1) {
     try {
       ranked = searchRoot(game, level, deadline, ranked[0].move)
+      searched = true
     } catch (error) {
       if (error !== ABORT) throw error
       break
@@ -258,9 +268,12 @@ export function chooseMove(fen, options = {}) {
   }
 
   // Weaker levels pick freely among moves that are close to the best one, which
-  // keeps openings varied instead of replaying the same game every time.
+  // keeps openings varied instead of replaying the same game every time. With
+  // no completed iteration every score is still 0, so the pool would be every
+  // legal move — play the best-ordered one instead of a coin toss.
   const cutoff = ranked[0].score - jitter
-  const pool = jitter > 0 ? ranked.filter((entry) => entry.score >= cutoff) : [ranked[0]]
+  const pool =
+    searched && jitter > 0 ? ranked.filter((entry) => entry.score >= cutoff) : [ranked[0]]
   const { move } = pool[Math.min(pool.length - 1, Math.floor(rng() * pool.length))]
 
   return move.promotion

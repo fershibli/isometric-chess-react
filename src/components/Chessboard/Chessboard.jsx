@@ -32,6 +32,7 @@ const ARROWS = {
 export default function Chessboard({
   board,
   selected,
+  held,
   legalTargets,
   lastMove,
   checkedKing,
@@ -100,7 +101,7 @@ export default function Chessboard({
   if (water <= 0) boardClasses.push('board--calm')
 
   return (
-    <div className="board-stage" style={{ '--pitch': pitch }}>
+    <div className="board-stage" style={{ '--pitch': pitch, '--water': water }}>
       <div
         className={boardClasses.join(' ')}
         role="group"
@@ -143,7 +144,10 @@ export default function Chessboard({
               col={col}
               piece={board[row][col]}
               isDark={(row + col) % 2 === 1}
-              isSelected={selected === square}
+              // `held` is the opponent's piece in the air. It gets the same
+              // lifted pose as your own selection, but never its move targets:
+              // a machine that shows you its options is showing its hand.
+              isSelected={selected === square || held === square}
               isLegalMove={Boolean(target)}
               isCapture={Boolean(target?.captured)}
               isLastMove={lastMove?.from === square || lastMove?.to === square}

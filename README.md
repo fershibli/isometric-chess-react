@@ -24,7 +24,8 @@ Menu ─┬─ Local match ─────────────────�
   reach, captures in a different colour
 - **Water**: a permanent swell plus a ripple that spreads from wherever a piece
   lands, with the strength adjustable or off
-- Undo, redo, PGN, FEN, and a share link that reopens the exact position
+- Undo, redo, and a share link that reopens the exact position
+- Four exports: PGN, the game score as a book prints it, CSV, and the raw FEN
 - Mouse, touch and keyboard; laid out for phones as well as desktops
 
 ## Screens, not toolbars
@@ -131,8 +132,38 @@ around it rises. It is applied with the Web Animations API rather than a CSS
 class, because a ripple has to restart the instant the next piece lands, and
 `composite: 'add'` lets it ride on top of the swell instead of replacing it.
 
-Everything answers `prefers-reduced-motion`, and **Settings → Water → Still**
-turns it off for good.
+The swell and the ripple both scale with the water setting, so **Subtle** — the
+default — is quieter everywhere and not just in the splash. **Still** stops it
+for good, and everything answers `prefers-reduced-motion`.
+
+## Exporting a game
+
+The standard for a chess game score is **algebraic notation**, which is what a
+book prints, and the standard file format around it is **PGN** — the same
+notation plus tags, read by every engine, database and site. That is the export
+that matters, and it is the first button in the pause screen.
+
+The other two are for cases PGN is bad at:
+
+| Export | What it is | For |
+| --- | --- | --- |
+| PGN | The standard | Loading the game into any chess program |
+| Move list | Numbered rows, White and Black aligned in columns | Reading it, pasting it into a message or a document |
+| CSV | One row per ply: side, piece, from, to, captured, promotion, check, position after | A spreadsheet |
+
+CSV is not a chess format and no chess program reads it. It is there because a
+spreadsheet is a reasonable thing to want.
+
+## Playing the machine
+
+The opponent runs in the tab — no accounts, no network. It answers in two beats:
+a pause while it decides, drawn fresh each move from a range that widens with the
+level, then the piece lifts, hangs for a moment, and lands. A reply that appeared
+on its destination read as the board glitching rather than as someone moving a
+piece.
+
+The held piece never shows its move targets. A machine that shows you its options
+is showing you its hand.
 
 ## Controls
 

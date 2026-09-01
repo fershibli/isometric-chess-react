@@ -9,6 +9,7 @@ import { useChessGame } from '../../chess/useChessGame'
 import { useEngineOpponent } from '../../chess/useEngineOpponent'
 import { LEVELS } from '../../chess/engine'
 import { colorName } from '../../chess/pieces'
+import { resultTag } from '../../chess/notation'
 import { encode, moveMessage, parseMessage, resetMessage, resignMessage } from '../../net/protocol'
 import './GameScreen.css'
 
@@ -167,6 +168,7 @@ export default function GameScreen({ session, settings, onSettings, onExit }) {
           <Chessboard
             board={game.board}
             selected={game.selected}
+            held={engine.holding}
             legalTargets={game.legalTargets}
             lastMove={game.lastMove}
             checkedKing={game.checkedKing}
@@ -215,6 +217,8 @@ export default function GameScreen({ session, settings, onSettings, onExit }) {
           online={online}
           fen={game.fen}
           pgn={game.pgn}
+          history={game.history}
+          result={resultTag(game)}
           canUndo={game.canUndo}
           canRedo={game.canRedo}
           settings={settings}

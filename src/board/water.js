@@ -28,7 +28,10 @@ export function rippleAt(row, col, origin, strength = 1) {
   if (distance > RIPPLE_REACH) return null
 
   const decay = Math.exp(-distance / 3.2)
-  const height = (5 + 11 * decay) * strength
+  // Deliberately small. This is meant to be caught out of the corner of the
+  // eye, not watched: at full strength the struck square moves about eight
+  // pixels and its neighbours two.
+  const height = (2.4 + 5.6 * decay) * strength
   if (height < 0.4) return null
 
   return {

@@ -3,6 +3,7 @@ import ViewControls from '../../components/ViewControls/ViewControls'
 import { useCopy } from '../../hooks/useCopy'
 import { PITCH_LEVELS, WATER_LEVELS } from '../../app/settings'
 import { ROTATIONS } from '../../chess/geometry'
+import { moveCsv, moveTable } from '../../chess/notation'
 import './PauseOverlay.css'
 
 function shareUrl(fen) {
@@ -15,6 +16,8 @@ export default function PauseOverlay({
   online,
   fen,
   pgn,
+  history,
+  result,
   canUndo,
   canRedo,
   settings,
@@ -117,8 +120,8 @@ export default function PauseOverlay({
           </div>
         </section>
 
-        <section className="pause__section" aria-label="Share">
-          <h3 className="heading">Share</h3>
+        <section className="pause__section" aria-label="Export">
+          <h3 className="heading">Export</h3>
           <div className="pause__row">
             <button
               type="button"
@@ -126,19 +129,41 @@ export default function PauseOverlay({
               onClick={() => copy('pgn', pgn)}
               disabled={!pgn}
             >
-              {label('pgn', 'Copy PGN')}
+              {label('pgn', 'PGN')}
             </button>
+            <button
+              type="button"
+              className="btn btn--ghost"
+              onClick={() => copy('moves', moveTable(history, { result }))}
+              disabled={history.length === 0}
+            >
+              {label('moves', 'Move list')}
+            </button>
+            <button
+              type="button"
+              className="btn btn--ghost"
+              onClick={() => copy('csv', moveCsv(history))}
+              disabled={history.length === 0}
+            >
+              {label('csv', 'CSV')}
+            </button>
+          </div>
+          <div className="pause__row">
             <button type="button" className="btn btn--ghost" onClick={() => copy('fen', fen)}>
-              {label('fen', 'Copy FEN')}
+              {label('fen', 'Position (FEN)')}
             </button>
             <button
               type="button"
               className="btn btn--ghost"
               onClick={() => copy('link', shareUrl(fen))}
             >
-              {label('link', 'Copy link')}
+              {label('link', 'Share link')}
             </button>
           </div>
+          <p className="pause__note">
+            PGN is the format other chess programs read. The move list is the same game
+            written the way a book prints it; the CSV is one row per ply, for a spreadsheet.
+          </p>
         </section>
 
         <button type="button" className="btn btn--danger pause__leave" onClick={onLeave}>

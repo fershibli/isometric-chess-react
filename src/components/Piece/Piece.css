@@ -93,27 +93,27 @@
 @keyframes piece-sway {
   0%,
   100% {
-    transform: translate(-50%, 14%) rotate(-0.45deg);
+    transform: translate(-50%, 14%) rotate(calc(var(--water, 1) * -0.22deg));
   }
   50% {
-    transform: translate(-50%, 13.4%) rotate(0.45deg);
+    transform: translate(-50%, 13.7%) rotate(calc(var(--water, 1) * 0.22deg));
   }
 }
 
 @keyframes piece-hover {
   0%,
   100% {
-    transform: translate(-50%, -6%) scale(1.06) rotate(-1.2deg);
+    transform: translate(-50%, -5%) scale(1.045) rotate(-0.6deg);
   }
   50% {
-    transform: translate(-50%, -11%) scale(1.08) rotate(1.2deg);
+    transform: translate(-50%, -8.5%) scale(1.055) rotate(0.6deg);
   }
 }
 
 @keyframes piece-land {
   0% {
     opacity: 0;
-    transform: translate(-50%, -74%) scale(1.14, 0.86);
+    transform: translate(-50%, -52%) scale(1.07, 0.93);
   }
   35% {
     opacity: 1;
@@ -121,13 +121,13 @@
   /* Squash on contact, then two shrinking rebounds: the weight of the piece
      is sold by what happens after it stops falling, not by the fall. */
   58% {
-    transform: translate(-50%, 17%) scale(1.2, 0.78);
+    transform: translate(-50%, 16%) scale(1.1, 0.88);
   }
   74% {
-    transform: translate(-50%, 6%) scale(0.94, 1.08);
+    transform: translate(-50%, 9%) scale(0.97, 1.04);
   }
   88% {
-    transform: translate(-50%, 16%) scale(1.05, 0.95);
+    transform: translate(-50%, 15%) scale(1.02, 0.98);
   }
   100% {
     transform: translate(-50%, 14%) scale(1, 1);
@@ -143,6 +143,6 @@
   }
 
   .piece--lifted {
-    transform: translate(-50%, -4%) scale(1.05);
+    transform: translate(-50%, -4%) scale(1.04);
   }
 }
