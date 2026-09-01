@@ -2,7 +2,7 @@ const STORAGE_KEY = 'isometric-chess:settings'
 
 export const DEFAULT_SETTINGS = {
   /** Ripple and swell strength: 0 turns the water off entirely. */
-  water: 1,
+  water: 0.55,
   trails: true,
   coordinates: true,
   pitch: 0.56,

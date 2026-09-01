@@ -156,61 +156,63 @@
 
 /* --------------------------------------------------------------- keyframes */
 
+/* Scaled by the water setting, so Subtle is genuinely subtler here and not
+   only in the ripple. At full strength this is barely half a pixel each way. */
 @keyframes tile-swell {
   0%,
   100% {
-    transform: translate3d(0, -0.9px, 0);
+    transform: translate3d(0, calc(var(--water, 1) * -0.5px), 0);
   }
   50% {
-    transform: translate3d(0, 0.9px, 0);
+    transform: translate3d(0, calc(var(--water, 1) * 0.5px), 0);
   }
 }
 
 @keyframes tile-sheen {
   0%,
   100% {
-    opacity: 0.24;
-    transform: translate3d(-6%, 0, 0);
+    opacity: calc(var(--water, 1) * 0.16);
+    transform: translate3d(-3.5%, 0, 0);
   }
   50% {
-    opacity: 0.7;
-    transform: translate3d(6%, 0, 0);
+    opacity: calc(var(--water, 1) * 0.42);
+    transform: translate3d(3.5%, 0, 0);
   }
 }
 
 @keyframes tile-emerge {
   from {
     opacity: 0;
-    transform: translateY(-16px);
+    transform: translateY(-11px);
   }
 }
 
 @keyframes tile-check {
   50% {
-    filter: brightness(1.35);
+    filter: brightness(1.22);
   }
 }
 
 @keyframes target-pulse {
   0%,
   100% {
-    transform: translate(-50%, -50%) scale(0.82);
-    opacity: 0.72;
+    transform: translate(-50%, -50%) scale(0.9);
+    opacity: 0.78;
   }
   50% {
-    transform: translate(-50%, -50%) scale(1.14);
+    transform: translate(-50%, -50%) scale(1.06);
     opacity: 1;
   }
 }
 
 @keyframes target-ring {
   0% {
-    transform: translate(-50%, -50%) scale(0.72);
-    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(0.86);
+    opacity: 0.92;
   }
   100% {
-    transform: translate(-50%, -50%) scale(1.18);
-    opacity: 0.35;
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.42;
   }
 }
 
@@ -228,6 +230,7 @@
 
 /* Water can be turned off in settings; the wood underneath stays. */
 .board--calm .tile__face,
-.board--calm .tile__sheen {
+.board--calm .tile__sheen,
+.board--calm .piece {
   animation: none;
 }
